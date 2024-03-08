@@ -1,0 +1,31 @@
+Cars:
+For the cars we need some kind of license to get the meshes. Then we can maybe work to get a different texture overlay
+
+https://www.cgtrader.com/3d-models/car/racing-car/blender-formula-f1-model-rigged price: $10
+
+https://www.cgtrader.com/3d-models/car/racing-car/f1-redbull-rb19-2023 $59 high quality
+
+https://www.cgtrader.com/3d-models/car/racing-car/f1-2023-ferrari-sf-23 $50 high quality (price has been reduced temporarily)
+
+https://www.turbosquid.com/3d-models/f1-red-racing-template-2023-2053606 $169 High res but expensive
+
+https://www.turbosquid.com/3d-models/formula-1-2022-generic-fia-concept-1802142 $25 generic texture
+
+https://www.turbosquid.com/3d-models/f1-williams-fw46-2024-2188734 $79 williams 2024 specs: would look the most similar from a mesh pov (VCARB also exists as well as a generic mockup)
+
+
+Free models:
+
+https://www.cgtrader.com/free-3d-models/car/racing-car/f1-2022-monopost blank canvas 
+
+https://www.cgtrader.com/free-3d-models/car/racing-car/formula-1-2022-car lower res (potentially computationally cheaper to use) 
+
+
+Maps:
+We can use blosm and Google Maps API to generate maps of the tracks. This will likely not even cost any money as Google provides a budget for people to use.
+
+
+OpenF1 API:
+https://openf1.org/
+This is the center piece of what needs to be developed. Understand the API's abiltiies, position the cars accurately on the track and ensure smooth running.
+We don't have to start with actual models of cars but could just have dots running around for now. The most important thing is to get a framework up and running.
