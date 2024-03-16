@@ -15,7 +15,7 @@ public class SphereMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.gameObject.transform.localPosition = new Vector3(-320, -2052, -140); // Random pick of a initial point, can be deleted
+        // this.gameObject.transform.localPosition = new Vector3(-320, -2052, -140); // Random pick of a initial point, can be deleted
         StartCoroutine("GetCarData"); // Start the coroutine to retrieve data from openF1
     }
 
@@ -35,7 +35,7 @@ public class SphereMove : MonoBehaviour
                 {
                     json = www.downloadHandler.text;
                     // Parse JSON array as an array of CarData {[x:,y:,z:,date:,...], [x:,y:,z:,date:,...], [x:,y:,z:,date:,...]}
-                    CarData[] carDataArray = JsonHelper.FromJson<CarData>(json);
+                    CarData[] carDataArray = JsonHelper.FromCustomJson<CarData>(json);
 
                     // Check if any entry has 'x' or 'y' not zero, meaning car moves
                     // This is for real-time game, if the car has not moved, the x y will all be 0
@@ -56,7 +56,7 @@ public class SphereMove : MonoBehaviour
             }
             yield return new WaitForSeconds(1); // Wait for 1 second before making the next request
         }
-        while (true // After getting initial moving car
+        while (true) // After getting initial moving car
         {
             url = "https://api.openf1.org/v1/location?session_key=9157&driver_number=81&date>" + car.date + "&date<" + GetNextSecond(car.date, 10);
             Debug.Log("Try get url" + url); // Retrieve the next 10s car data
@@ -74,7 +74,7 @@ public class SphereMove : MonoBehaviour
                     if (json != "[]")
                     {
                         // Parse JSON array
-                        CarData[] carDataArray = JsonHelper.FromJson<CarData>(json);
+                        CarData[] carDataArray = JsonHelper.FromCustomJson<CarData>(json);
                         // Render the next car position
                         car.date = carDataArray[0].date;
                         car.x = carDataArray[0].x;
@@ -95,9 +95,9 @@ public class SphereMove : MonoBehaviour
     void Update()
     {
         // Some bullshit transformation
-        float cos = 0.92233238F, sin = 0.38639743F, scale = 0.10095949422356618F;
-        float trans_x = -330F, trans_y = -2427F;
-        Vector3 newPosition = new Vector3(scale * (cos * car.x - sin * car.y) + trans_x, scale * (sin * car.x + cos * car.y) + trans_y, this.gameObject.transform.localPosition.z);
+        float cos = 1F, sin = 0F, scale = 0.1F;
+        float trans_x = -0F, trans_y = -0F;
+        Vector3 newPosition = new Vector3(scale * (cos * -car.x - sin * car.y) + trans_x, scale * (sin * car.x + cos * car.y) + trans_y, this.gameObject.transform.localPosition.z);
 
         this.gameObject.transform.localPosition = newPosition;
         Debug.Log("Updata x=" + this.gameObject.transform.localPosition.x.ToString() + "y=" + this.gameObject.transform.localPosition.y.ToString() + "date=" + car.date);
@@ -145,14 +145,13 @@ public class SphereMove : MonoBehaviour
     // Helper class to parse JSON array
     public static class JsonHelper
     {
-        public static T[] FromJson<T>(string json)
+        public static T[] FromCustomJson<T>(string json)
         {
             string newJson = "{\"array\":" + json + "}";
             Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(newJson);
             return wrapper.array;
         }
 
-        [System.Serializable]
         private class Wrapper<T>
         {
             public T[] array;
