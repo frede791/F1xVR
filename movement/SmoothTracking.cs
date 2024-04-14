@@ -9,9 +9,9 @@ using System.Collections.Generic;
 public class SmoothTracking : MonoBehaviour
 {
     string json; // Variable to store received JSON data
-    string url; // URL to fetch from
     CarData car = new CarData(); // the current car info
 
+    string url; // URL to fetch from
     const string session_key = "9157";
     const string driver_number = "81";
 
@@ -28,11 +28,13 @@ public class SmoothTracking : MonoBehaviour
     DateTime current_appending_time;
     DateTime current_tracking_time;
 
+    bool enableDebugLogs = false;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Start");
+        if (enableDebugLogs) Debug.Log("Start");
         // this.gameObject.transform.localPosition = new Vector3(-320, -2052, -140); // Random pick of a initial point, can be deleted
         StartCoroutine("WaitForGameBegin");
     }
@@ -48,7 +50,7 @@ public class SmoothTracking : MonoBehaviour
 
                 if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    Debug.Log(www.error);
+                    if (enableDebugLogs) Debug.Log(www.error);
                 }
                 else
                 {
@@ -83,7 +85,7 @@ public class SmoothTracking : MonoBehaviour
 
                         Vector3 newPosition = new Vector3(car.x, car.y, this.gameObject.transform.localPosition.z);
                         this.gameObject.transform.localPosition = newPosition;
-                        Debug.Log("Initial x=" + this.gameObject.transform.localPosition.x.ToString() + "y=" + this.gameObject.transform.localPosition.y.ToString());
+                        if (enableDebugLogs) Debug.Log("Initial x=" + this.gameObject.transform.localPosition.x.ToString() + "y=" + this.gameObject.transform.localPosition.y.ToString());
                     }
                     else
                     {
@@ -102,14 +104,14 @@ public class SmoothTracking : MonoBehaviour
     {
         url = "https://api.openf1.org/v1/location?session_key=9157&driver_number=81&date>" + current_appending_time.ToString("yyyy-MM-ddTHH:mm:ss.ffffff")
             + "&date<" + GetNextSecond(current_appending_time.ToString("yyyy-MM-ddTHH:mm:ss.ffffff"), 2);
-        Debug.Log("Try get url" + url); // Retrieve the next 2s car data
+        if (enableDebugLogs) Debug.Log("Try get url" + url); // Retrieve the next 2s car data
         using (UnityWebRequest www = UnityWebRequest.Get(url))
         {
             yield return www.SendWebRequest();
 
             if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
             {
-                Debug.Log(www.error);
+                if (enableDebugLogs) Debug.Log(www.error);
             }
             else
             {
@@ -130,7 +132,7 @@ public class SmoothTracking : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning("Empty measurement");
+                    if (enableDebugLogs) Debug.LogWarning("Empty measurement");
                     // -------------- TODO ------------------
                     // 2s no data, race ends?
                     // StopCoroutine when race finished
@@ -148,7 +150,7 @@ public class SmoothTracking : MonoBehaviour
         if ((!isLerping) && listX.Count < 1)
         {
             // If this warining doesn't show, then in this update frame the car will definitely be moved forward a bit
-            Debug.LogWarning("Update frame no lerping destination!");
+            if (enableDebugLogs) Debug.LogWarning("Update frame no lerping destination!");
         }
         else if ((!isLerping) && listX.Count >= 1)
         {
@@ -177,7 +179,7 @@ public class SmoothTracking : MonoBehaviour
         while ((Time.time - startTime) < duration)
         {
             this.gameObject.transform.localPosition = Vector3.Lerp(startPosition, targetPosition, (Time.time - startTime) / duration);
-            Debug.Log("Lerp update x=" + this.gameObject.transform.localPosition.x.ToString() + "y=" + this.gameObject.transform.localPosition.y.ToString());
+            if (enableDebugLogs) Debug.Log("Lerp update x=" + this.gameObject.transform.localPosition.x.ToString() + "y=" + this.gameObject.transform.localPosition.y.ToString());
             yield return null;
         }
         // Ensure the final position is exactly the target position
@@ -205,7 +207,7 @@ public class SmoothTracking : MonoBehaviour
         }
     }
 
-    public static DateTime GetDateTime(string utcDateTime)
+    public DateTime GetDateTime(string utcDateTime)
     {
         // Have no idea why there's a fking '2023-09-03T13:48:36' without microsec in Monza date data
         // So I append 000000 to make it '2023-09-03T13:48:36.000000'
@@ -224,7 +226,7 @@ public class SmoothTracking : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Cannot get DateTime!");
+            if (enableDebugLogs) Debug.LogWarning("Cannot get DateTime!");
             return DateTime.MinValue;
         }
     }
