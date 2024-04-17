@@ -30,12 +30,13 @@ public class SmoothTracking : MonoBehaviour
 
     bool enableDebugLogs = false;
 
+    Rigidbody rb; // Rigidbody component reference
 
     // Start is called before the first frame update
     void Start()
     {
+        rb = GetComponent<Rigidbody>(); // Get the Rigidbody component
         if (enableDebugLogs) Debug.Log("Start");
-        // this.gameObject.transform.localPosition = new Vector3(-320, -2052, -140); // Random pick of a initial point, can be deleted
         StartCoroutine("WaitForGameBegin");
     }
 
@@ -84,7 +85,7 @@ public class SmoothTracking : MonoBehaviour
                         car.date = current_tracking_time.ToString("yyyy-MM-ddTHH:mm:ss.ffffff");
 
                         Vector3 newPosition = new Vector3(car.x, car.y, this.gameObject.transform.localPosition.z);
-                        this.gameObject.transform.localPosition = newPosition;
+                        rb.MovePosition(newPosition);
                         if (enableDebugLogs) Debug.Log("Initial x=" + this.gameObject.transform.localPosition.x.ToString() + "y=" + this.gameObject.transform.localPosition.y.ToString());
                     }
                     else
@@ -143,16 +144,16 @@ public class SmoothTracking : MonoBehaviour
         is_fetching = false;
     }
 
-
+    
     private void Update()
     {
         if (!start_game) return;
-        if ((!isLerping) && listX.Count < 1)
+        if ( (!isLerping) && listX.Count < 1 )
         {
             // If this warining doesn't show, then in this update frame the car will definitely be moved forward a bit
             if (enableDebugLogs) Debug.LogWarning("Update frame no lerping destination!");
-        }
-        else if ((!isLerping) && listX.Count >= 1)
+        } 
+        else if ( (!isLerping) && listX.Count >= 1 )
         {
             car.x = listX.Dequeue();
             car.y = listY.Dequeue();
@@ -164,7 +165,7 @@ public class SmoothTracking : MonoBehaviour
             StartCoroutine(LerpToPosition(newPosition, (float)(destination_time - current_tracking_time).TotalSeconds));
             current_tracking_time = destination_time;
         }
-        if ((!is_fetching) && listX.Count < threshold)
+        if ( (!is_fetching) && listX.Count < threshold)
         {
             is_fetching = true;
             StartCoroutine("FetchandCacheData"); // Start the coroutine to retrieve 2s data once
@@ -178,12 +179,12 @@ public class SmoothTracking : MonoBehaviour
         float startTime = Time.time;
         while ((Time.time - startTime) < duration)
         {
-            this.gameObject.transform.localPosition = Vector3.Lerp(startPosition, targetPosition, (Time.time - startTime) / duration);
+            rb.MovePosition(Vector3.Lerp(startPosition, targetPosition, (Time.time - startTime) / duration));
             if (enableDebugLogs) Debug.Log("Lerp update x=" + this.gameObject.transform.localPosition.x.ToString() + "y=" + this.gameObject.transform.localPosition.y.ToString());
             yield return null;
         }
         // Ensure the final position is exactly the target position
-        this.gameObject.transform.localPosition = targetPosition;
+        rb.MovePosition(targetPosition);
         isLerping = false;
     }
 
