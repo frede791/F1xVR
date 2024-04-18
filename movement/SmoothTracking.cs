@@ -177,10 +177,22 @@ public class SmoothTracking : MonoBehaviour
     {
         Vector3 startPosition = this.gameObject.transform.localPosition;
         float startTime = Time.time;
+
+        Vector3 up = new Vector3(0, 0, 1);
+        Vector3 direction;
+
         while ((Time.time - startTime) < duration)
         {
             rb.MovePosition(Vector3.Lerp(startPosition, targetPosition, (Time.time - startTime) / duration));
             if (enableDebugLogs) Debug.Log("Lerp update x=" + this.gameObject.transform.localPosition.x.ToString() + "y=" + this.gameObject.transform.localPosition.y.ToString());
+            
+            direction = (targetPosition - startPosition).normalized;
+            if (direction != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction, up);
+                rb.MoveRotation(Quaternion.Lerp(this.gameObject.transform.rotation, targetRotation, (Time.time - startTime) / duration));
+
+            }
             yield return null;
         }
         // Ensure the final position is exactly the target position

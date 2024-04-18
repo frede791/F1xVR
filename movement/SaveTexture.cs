@@ -18,6 +18,12 @@ public class SaveTexture : MonoBehaviour
             string materialName = mat.name.Replace("Material_", "");
             // Load texture using naming convention
             Texture2D texture = Resources.Load<Texture2D>("Image_" + materialName);
+            if (materialName == "0.003")
+                texture = Resources.Load<Texture2D>("Image_" + "0.2843");
+            if (materialName == "0.001")
+                texture = Resources.Load<Texture2D>("Image_" + "0.2846");
+            if (materialName == "0.002")
+                texture = Resources.Load<Texture2D>("Image_" + "0.5533");
             if (texture != null)
             {
                 // Assign texture to material's main texture property
@@ -32,10 +38,5 @@ public class SaveTexture : MonoBehaviour
                 Debug.LogError("Texture Image_" + materialName + " not found.");
             }
         }
-
-        // Save changes to the assets
-#if UNITY_EDITOR
-        UnityEditor.AssetDatabase.SaveAssets();
-#endif
     }
 }
