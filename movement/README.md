@@ -5,7 +5,6 @@
 1. Add a 3D sphere to the SampleScene.
 2. Attach SmoothTracking.cs script to the 3D sphere.
 3. Add camera to the scene if wanted.
-4. Go Edit->Project Settings->Physics, make sure the gravity axis is in z, not default y.
 
 For the z-axis in the map (the gravity axis), I did not set car.z, which can be obtained from the retrieved data. Instead I added mesh collider component (in the Inspector) for the map and rigidbody component for the sphere so then it will have gravitational force. I haven’t tried setting the car.z, can be tried.
 
@@ -41,7 +40,7 @@ The Monza_traj.py will generate data and plot for this race in Monza. Might be h
 
 5. File -> Export -> .fbx
 
-6. ![image-20240416222814621](C:/Users/ASUS/Desktop/MSc_Term1_2/VRI/Proj/F1xVR/blender/README.assets/image-20240416222814621.png)
+   ![image-20240416222814621](C:/Users/ASUS/Desktop/MSc_Term1_2/VRI/Proj/F1xVR/blender/README.assets/image-20240416222814621.png)
 
 ##  Get textured cleaned map - Unity
 
@@ -59,19 +58,22 @@ The Monza_traj.py will generate data and plot for this race in Monza. Might be h
 
    <img src="C:/Users/ASUS/Desktop/MSc_Term1_2/VRI/Proj/F1xVR/gitRepo/F1xVR/movement/README.assets/image-20240417020127491.png" alt="image-20240417020127491" style="zoom:25%;" />
 
-5. Select the .fbx, go Inspector -> Materials -> Extract Materials -> Select path Assets/monza_clean/Resources. Then in Resources folder you should have all images and a lot of metal balls without texture.
 
-6. Attach the SaveTexture.cs script to something in the scene
+5. Select the .fbx, check the Read/Write checkbox
 
-7. Uncheck the script SmoothTracking.cs on Sphere temporarily
+<img src="C:/Users/ASUS/Desktop/MSc_Term1_2/VRI/Proj/F1xVR/gitRepo/F1xVR/movement/README.assets/monza_import.png" alt="monza_import" style="zoom:38%;" />
 
-8. Run the game to run SaveTexture.cs
+6. Inspector -> Materials -> Extract Materials -> Select path Assets/monza_clean/Resources. Then in Resources folder you should have all images and a lot of metal balls without texture.
 
-9. Look at the Log, there should only exist 3 warning (missing Image_0.001 0.002 0.003, these are fine). Then the Resources folder looks like:
+7. Attach the SaveTexture.cs script to something in the scene
 
-   ![image-20240417020444019](C:/Users/ASUS/Desktop/MSc_Term1_2/VRI/Proj/F1xVR/gitRepo/F1xVR/movement/README.assets/image-20240417020444019.png)
+8. Uncheck the script SmoothTracking.cs on Sphere temporarily
 
-10. Afterwards, you can attach the monza_clean scene to the SampleScene, all textures will be there
+9. Run the game to run SaveTexture.cs
+
+10. Look at the Log, there should only exist 3 warning (missing Image_0.001 0.002 0.003, these are fine). Then the Resources folder looks like:![image-20240417020444019](C:/Users/ASUS/Desktop/MSc_Term1_2/VRI/Proj/F1xVR/gitRepo/F1xVR/movement/README.assets/image-20240417020444019.png)
+
+11. Afterwards, you can attach the monza_clean scene to the SampleScene, all textures will be there
 
 ## Run the game
 
@@ -93,4 +95,8 @@ The Monza_traj.py will generate data and plot for this race in Monza. Might be h
 
    
 
-7. Run play, and if necessary swap from the "play" mode to "scene" mode to be able to watch the whole map.
+7. Unity Edit -> Project Settings
+
+   ![proj_setting](C:/Users/ASUS/Desktop/MSc_Term1_2/VRI/Proj/F1xVR/gitRepo/F1xVR/movement/README.assets/proj_setting.png)
+
+8. Run play, and if necessary swap from the "play" mode to "scene" mode to be able to watch the whole map.

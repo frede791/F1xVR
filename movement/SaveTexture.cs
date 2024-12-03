@@ -22,6 +22,9 @@ public class SaveTexture : MonoBehaviour
                 texture = Resources.Load<Texture2D>("Image_" + "0.2843");
             if (materialName == "0.001")
                 texture = Resources.Load<Texture2D>("Image_" + "0.2846");
+            // F**k this image and Material name. Dismatch
+            if (materialName == "0.2846")
+                texture = Resources.Load<Texture2D>("Image_" + "0.5536");
             if (materialName == "0.002")
                 texture = Resources.Load<Texture2D>("Image_" + "0.5533");
             if (texture != null)
@@ -38,5 +41,8 @@ public class SaveTexture : MonoBehaviour
                 Debug.LogError("Texture Image_" + materialName + " not found.");
             }
         }
+#if UNITY_EDITOR
+        UnityEditor.AssetDatabase.SaveAssets();
+#endif
     }
 }
